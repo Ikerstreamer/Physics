@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="vue.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="components/assignment.js"> </script>
+    <script src="components/assignment-button.js"> </script>
+    <script src="components/question.js"> </script>
+    <script src="data.js"> </script>
+    <script src="main.js"> </script>
+    <link rel="stylesheet" href="style.css">
+    <title>Physics Web Assign</title>
+  </head>
+  <body onload="load()">
+    <div id="app">
+        <h1>Assignment List</h1>
+        <assignment-button
+          v-for="assign in assignments"
+          :key="assign.num"
+          :num="assign.num"
+          v-on:active="setActive(assign.num)"
+        >
+        </assignment-button>
+        <assignment
+        v-if="shownAssign != -1"
+        :assign="currentAssign"
+        >
+        </assignment>
+    </div>
+  </body>
+</html>
