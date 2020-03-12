@@ -72,7 +72,7 @@ let data = {
         },
         {
           num: 6,
-          text: `A certain substance has a dielectric constant of *3.0* and a dielectric strength of *16* MV/m. If it is used as the dielectric material in a parallel-plate capacitor, what minimum area should the plates of the capacitor have to obtain a capacitance of 7.0 &#215; 10<sup>−2</sup> &mu;F and to ensure that the capacitor will be able to withstand a potential difference of 4.0 kV?`,
+          text: `A certain substance has a dielectric constant of *3.0* and a dielectric strength of *16* MV/m. If it is used as the dielectric material in a parallel-plate capacitor, what minimum area should the plates of the capacitor have to obtain a capacitance of 7.0 &#215; 10<sup>-2</sup> &mu;F and to ensure that the capacitor will be able to withstand a potential difference of 4.0 kV?`,
           answers: [
             {
               text: "",
@@ -91,12 +91,71 @@ let data = {
             {
               text: "",
               value: (input) => {
-                let C1 = 21 * input[0] * Math.pow(c, 2) / 2 * EPSILON_NAUGHT / (input[1] * m);
-                let C2 = input[0] * Math.pow(c, 2) * EPSILON_NAUGHT / (input[1] * m) * (42 * 58 / (42 + 58));
-                return C1 + C2;
+                let C1 = 21 * input[0] * Math.pow(c, 2) * EPSILON_NAUGHT / (input[1] * m);
+                let C2 = input[0] * Math.pow(c, 2) * EPSILON_NAUGHT * 42 * 58 / ((input[1] * m) / 2 * (58 + 42));
+                return (C1 + C2) / 2;
               },
-              unit: "m<sup>2</sup>"
+              unit: "F"
             }
+          ]
+        },
+        {
+          num: 8,
+          text: `The figure below shows a parallel plate capacitor of plate area <em>A</em> = *110* cm<sup>2</sup> and plate separation <em>d</em> = *1.30* cm. A potential difference of <em>V<sub>0</sub></em> = *57.0* V is applied between the plates. Suppose that the battery remains connected while the dielectric slab of thickness <em>b</em> = 0.780 cm and dielectric constant &kappa; = *2.70* is being introduced. Calculate the following values.`,
+          answers: [
+            {
+              text: "(a) the capacitence",
+              value: (input) => {
+                let d = 0.78 * c * (1 / input[3] - 1) + input[1] * c;
+                return EPSILON_NAUGHT * input[0] * Math.pow(c, 2) / d / p;
+              },
+              unit: "pF"
+            },
+            {
+              text: "(b) the charge on the capacitor plates",
+              value: (input) => {
+                console.log(data.assignments[0].questions[7].answers[0].value(input));
+                let C = data.assignments[0].questions[7].answers[0].value(input) * p;
+                return C * input[2] / n;
+              },
+              unit: "nC"
+            },
+            {
+              text: "(c) the electric field in the gap",
+              value: (input) => {
+                let q = data.assignments[0].questions[7].answers[1].value(input) * n;
+                return q / (input[0] * Math.pow(c, 2)) / EPSILON_NAUGHT;
+              },
+              unit: "N/C"
+            },
+            {
+              text: "(d) the electric field in the slab, after the slab is in place",
+              value: (input) => {
+                let E = data.assignments[0].questions[7].answers[2].value(input);
+                return E / input[3];
+              },
+              unit: "N/C"
+            },
+          ]
+        },
+        {
+          num: 9,
+          text: `Two parallel plates of area *140* cm<sup>2</sup> are given charges of equal magnitudes *9.5* &#215; 10<sup>-7</sup> C but opposite signs. The electric field within the dielectric material filling the space between the plates is *2.5* &#215; 10<sup>6</sup> V/m.`,
+          answers: [
+            {
+              text: "(a) Calculate the dielectric constant of the material.",
+              value: (input) => {
+                return input[1] * 1e-7 / (input[0] * Math.pow(c, 2) * EPSILON_NAUGHT * input[2] * M);
+              },
+              unit: ""
+            },
+            {
+              text: "(b) Determine the magnitude of the charge induced on each dielectric surface.",
+              value: (input) => {
+                return input[1] * 1e-7 - input[2] * M * input[0] * Math.pow(c, 2) * EPSILON_NAUGHT;
+              },
+              unit: ""
+            },
           ]
         },
       ],
@@ -104,18 +163,42 @@ let data = {
   ]
 };
 
-const p = Math.pow(10, -12);
-const n = Math.pow(10, -9);
-const u = Math.pow(10, -6);
+const p = 1e-12;
+const n = 1e-9;
+const u = 1e-6;
 const m = 0.001;
 const c = 0.01;
 
 const k = 1000;
-const M = Math.pow(10, 6);
-const G = Math.pow(10, 9);
+const M = 1e6;
+const G = 1e9;
 
 const EPSILON_NAUGHT = 8.854 * p;
 const ELECTRON_CHARGE = 1.60217662 * Math.pow(10, -19);
+
+// {
+//   num: 8,
+//   text: `The figure below shows a parallel plate capacitor of plate area <em>A</em> = *110* cm<sup>2</sup> and plate separation <em>d</em> = *1.30* cm. A potential difference of <em>V<sub>0</sub></em> = *57.0* V is applied between the plates. Suppose that the battery remains connected while the dielectric slab of thickness <em>b</em> = 0.780 cm and dielectric constant &kappa; = *2.70* is being introduced. Calculate the following values.`,
+//   answers: [
+//     {
+//       text: "(a) the capacitence",
+//       value: (input) => {
+//         let d = 0.78 * c * (1 / input[3] - 1) + input[1] * c;
+//         return EPSILON_NAUGHT * input[0] * Math.pow(c, 2) / d / p;
+//       },
+//       unit: "pF"
+//     },
+//     {
+//       text: "(b) the charge on the capacitor plates",
+//       value: (input) => {
+//         console.log(data.assignments[0].questions[7].answers[0].value(input));
+//         let C = data.assignments[0].questions[7].answers[0].value(input);
+//         return C * input[2] / n;
+//       },
+//       unit: "nC"
+//     }
+//   ]
+// },
 
 
 
